@@ -1,16 +1,53 @@
 body {
-  font-family: 'Open Sans', sans-serif;
-  font-size: 16px;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 20px;
 }
 
-.swim-lanes {
-  min-height: 60vh;
+header {
+    background-color: #a8d8ea;
+    padding: 20px;
+    text-align: center;
 }
 
-.task-card {
-  margin: 0 auto;
+h1 {
+    color: #333;
 }
 
-.task-card:hover {
-  cursor: grab;
+main {
+    max-width: 1200px;
+    margin: 0 auto;
 }
+
+/* Form styling */
+form {
+    background-color: #fff1e6;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+input, textarea {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #aa96da;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #9384c7;
+}
+
+/*
