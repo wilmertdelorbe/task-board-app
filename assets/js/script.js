@@ -45,14 +45,14 @@ function createTaskCard(task) {
 
 // Function to render all tasks in their respective lanes
 function renderTaskList() {
-    const todoList = document.querySelector('#todo-cards .task-list');
-    const inProgressList = document.querySelector('#in-progress-cards .task-list');
-    const doneList = document.querySelector('#done-cards .task-list');
+    const todoList = document.querySelector('#todo-cards');
+    const inProgressList = document.querySelector('#in-progress-cards');
+    const doneList = document.querySelector('#done-cards');
 
     // Clear existing tasks
-    todoList.innerHTML = '';
-    inProgressList.innerHTML = '';
-    doneList.innerHTML = '';
+    todoList.innerHTML = '<h2>To Do</h2>';
+    inProgressList.innerHTML = '<h2>In Progress</h2>';
+    doneList.innerHTML = '<h2>Done</h2>';
 
     // Render tasks in appropriate lanes
     taskList.forEach(task => {
@@ -101,7 +101,7 @@ function handleDeleteTask(event) {
 // Function to set up drag and drop functionality
 function setupDragAndDrop() {
     const taskCards = document.querySelectorAll('.task-card');
-    const lanes = document.querySelectorAll('.lane .task-list');
+    const lanes = document.querySelectorAll('.lane');
 
     taskCards.forEach(card => {
         card.addEventListener('dragstart', () => {
@@ -126,8 +126,9 @@ function setupDragAndDrop() {
         });
 
         lane.addEventListener('drop', e => {
+            e.preventDefault();
             const taskId = parseInt(document.querySelector('.dragging').getAttribute('data-task-id'));
-            const newStatus = lane.closest('.lane').id.replace('-cards', '');
+            const newStatus = lane.id.replace('-cards', '');
             updateTaskStatus(taskId, newStatus);
         });
     });
