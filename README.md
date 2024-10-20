@@ -4,7 +4,7 @@
 Task Board App is a simple web application that allows users to manage their tasks by organizing them into different status categories: To Do, In Progress, and Done. This project demonstrates the use of HTML, CSS, and JavaScript to create an interactive task management system.
 
 ## Screenshot
-![Task Board App Screenshot](./assets/images/task-board-screenshot.png)
+![Task Board App Screenshot](./assets/images/task-board-app-screenshot.png)
 
 ## Deployed Application
 [View the live Task Board App](https://wilmertdelorbe.github.io/task-board-app/)
