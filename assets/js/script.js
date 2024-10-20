@@ -1,33 +1,37 @@
+// Initialize task list and next ID from localStorage or set default values
 let taskList = JSON.parse(localStorage.getItem('tasks')) || [];
 let nextId = JSON.parse(localStorage.getItem('nextId')) || 1;
 
+// Function to create a task card DOM element
 function createTaskCard(task) {
     const taskCard = document.createElement('div');
     taskCard.classList.add('task-card');
     taskCard.setAttribute('data-task-id', task.id);
     taskCard.draggable = true;
 
+    // Create and append title element
     const title = document.createElement('h3');
     title.textContent = task.title;
     taskCard.appendChild(title);
 
+    // Create and append description element
     const description = document.createElement('p');
     description.textContent = task.description;
     taskCard.appendChild(description);
 
+    // Create and append due date element
     const dueDate = document.createElement('p');
     dueDate.textContent = `Due: ${task.dueDate}`;
     taskCard.appendChild(dueDate);
 
-    if (task.status === 'todo') {
-        const deleteBtn = document.createElement('button');
-        deleteBtn.textContent = 'Delete';
-        deleteBtn.classList.add('delete-btn');
-        deleteBtn.setAttribute('data-task-id', task.id);
-        taskCard.appendChild(deleteBtn);
-    }
+    // Add delete button for all tasks
+    const deleteBtn = document.createElement('button');
+    deleteBtn.textContent = 'Delete';
+    deleteBtn.classList.add('delete-btn');
+    deleteBtn.setAttribute('data-task-id', task.id);
+    taskCard.appendChild(deleteBtn);
 
-    // Color coding
+    // Color coding based on due date
     const now = dayjs();
     const taskDueDate = dayjs(task.dueDate);
     if (now.isSame(taskDueDate, 'day')) {
@@ -39,15 +43,18 @@ function createTaskCard(task) {
     return taskCard;
 }
 
+// Function to render all tasks in their respective lanes
 function renderTaskList() {
-    const todoList = document.getElementById('todo-list');
-    const inProgressList = document.getElementById('in-progress-list');
-    const doneList = document.getElementById('done-list');
+    const todoList = document.querySelector('#todo-cards .task-list');
+    const inProgressList = document.querySelector('#in-progress-cards .task-list');
+    const doneList = document.querySelector('#done-cards .task-list');
 
+    // Clear existing tasks
     todoList.innerHTML = '';
     inProgressList.innerHTML = '';
     doneList.innerHTML = '';
 
+    // Render tasks in appropriate lanes
     taskList.forEach(task => {
         const taskCard = createTaskCard(task);
         if (task.status === 'todo') {
@@ -59,9 +66,11 @@ function renderTaskList() {
         }
     });
 
+    // Set up drag and drop functionality
     setupDragAndDrop();
 }
 
+// Function to handle adding a new task
 function handleAddTask(event) {
     event.preventDefault();
     const task = {
@@ -79,6 +88,7 @@ function handleAddTask(event) {
     document.getElementById('newTaskForm').reset();
 }
 
+// Function to handle deleting a task
 function handleDeleteTask(event) {
     if (event.target.classList.contains('delete-btn')) {
         const taskId = parseInt(event.target.getAttribute('data-task-id'));
@@ -88,9 +98,10 @@ function handleDeleteTask(event) {
     }
 }
 
+// Function to set up drag and drop functionality
 function setupDragAndDrop() {
     const taskCards = document.querySelectorAll('.task-card');
-    const lanes = document.querySelectorAll('.lane');
+    const lanes = document.querySelectorAll('.lane .task-list');
 
     taskCards.forEach(card => {
         card.addEventListener('dragstart', () => {
@@ -116,12 +127,13 @@ function setupDragAndDrop() {
 
         lane.addEventListener('drop', e => {
             const taskId = parseInt(document.querySelector('.dragging').getAttribute('data-task-id'));
-            const newStatus = lane.id.replace('-cards', '');
+            const newStatus = lane.closest('.lane').id.replace('-cards', '');
             updateTaskStatus(taskId, newStatus);
         });
     });
 }
 
+// Helper function to determine where to insert dragged element
 function getDragAfterElement(container, y) {
     const draggableElements = [...container.querySelectorAll('.task-card:not(.dragging)')];
 
@@ -136,6 +148,7 @@ function getDragAfterElement(container, y) {
     }, { offset: Number.NEGATIVE_INFINITY }).element;
 }
 
+// Function to update task status after drag and drop
 function updateTaskStatus(taskId, newStatus) {
     const task = taskList.find(task => task.id === taskId);
     if (task) {
@@ -145,8 +158,11 @@ function updateTaskStatus(taskId, newStatus) {
     }
 }
 
+// Event listener for DOM content loaded
 document.addEventListener('DOMContentLoaded', function() {
     renderTaskList();
     document.getElementById('newTaskForm').addEventListener('submit', handleAddTask);
-    document.getElementById('todo-list').addEventListener('click', handleDeleteTask);
+    document.querySelectorAll('.lane').forEach(lane => {
+        lane.addEventListener('click', handleDeleteTask);
+    });
 });
